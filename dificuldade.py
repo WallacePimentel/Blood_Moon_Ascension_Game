@@ -1,14 +1,14 @@
 from PPlay.sprite import *
 
 def dif (janela,tecla,click,bot):
-    bot.set_position(janela.width/2 - bot.width/2,janela.height / 2 - 90)
+    bot.set_position(janela.width/2 - bot.width/2,janela.height / 2 - 15)
     botao_facil = Sprite("z_facil.png")
     botao_medio = Sprite("z_medio.png")
     botao_dificil = Sprite("z_dificil.png")
 
     if click.is_over_object(bot):
         bot = Sprite("z_dificuldade_p.png")
-        bot.set_position(janela.width / 2 - bot.width / 2, janela.height / 2 - 90)
+        bot.set_position(janela.width / 2 - bot.width / 2, janela.height / 2 - 15)
         bot.draw()
         if click.is_button_pressed(1):
             while True:

@@ -11,7 +11,9 @@ janela.set_background_color([0,0,0])
 tecla = Window.get_keyboard()
 click = Window.get_mouse()
 
-background = GameImage("fundo_vila.png")
+vila = GameImage("fundo_vila.png")
+background = GameImage("fundo.png")
+
 ground = Sprite("ground.png")
 botao_jogar = Sprite("z_jogar.png")
 botao_dificuldade = Sprite("z_dificuldade.png")
@@ -20,7 +22,7 @@ botao_sair = Sprite("z_sair.png")
 while True:
     janela.set_background_color([0,0,0])
 
-    jogar.jogar(janela, tecla, click, botao_jogar,ground,background)
+    jogar.jogar(janela, tecla, click, botao_jogar,ground,background,vila)
     dificuldade.dif(janela,tecla,click,botao_dificuldade)
     sair.sair(janela,click,botao_sair)
 
