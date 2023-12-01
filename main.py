@@ -1,29 +1,21 @@
-from PPlay.window import *
-from PPlay.sprite import *
-from PPlay.gameimage import *
-import jogar
-import dificuldade
-import sair
+from variaveis_menu import *
+import menu
 
-janela = Window(1080,720)
-janela.set_title("Blood Moon Ascension")
-janela.set_background_color([0,0,0])
-tecla = Window.get_keyboard()
-click = Window.get_mouse()
+inic_jogo = False
+while(True):
+    janela_menu.set_background_color([0,0,0])
+    
+    fundo_inicial.draw()
+    comecar.draw()
+    if mouse_menu.is_over_object(comecar):
+        comecar_select.draw()
+        if mouse_menu.is_button_pressed(1):
+            inic_jogo = menu.men()
+    if teclado_menu.key_pressed("esc"):
+        break
+    if(inic_jogo):
+        break
+    janela_menu.update()
 
-vila = GameImage("fundo_vila.png")
-background = GameImage("fundo.png")
-
-ground = Sprite("ground.png")
-botao_jogar = Sprite("z_jogar.png")
-botao_dificuldade = Sprite("z_dificuldade.png")
-botao_sair = Sprite("z_sair.png")
-
-while True:
-    janela.set_background_color([0,0,0])
-
-    jogar.jogar(janela, tecla, click, botao_jogar,ground,background,vila)
-    dificuldade.dif(janela,tecla,click,botao_dificuldade)
-    sair.sair(janela,click,botao_sair)
-
-    janela.update()
+if(inic_jogo):
+    import jogo
