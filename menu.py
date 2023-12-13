@@ -1,6 +1,7 @@
 from variaveis_menu import *
 import select_dificuldade
 from variaveis import *
+
 from demon import *
 
 def men():

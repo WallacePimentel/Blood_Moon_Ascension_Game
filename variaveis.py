@@ -6,6 +6,7 @@ from PPlay.animation import *
 #Janela do Jogo:
 janela = Window(1080,720)
 start = 0
+onda = 1
 
 #Teclado
 tecla = janela.get_keyboard()
@@ -26,6 +27,8 @@ atacou = False
 cronometro_ataque = 0
 cronometro_dash = 2
 player_dash = False
+player_invuneravel = False
+player_invuneravel_cronometro = 0
 
 #Frames de Animação do Player:
 
