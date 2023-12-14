@@ -1,12 +1,9 @@
-from PPlay.window import *
-from PPlay.sprite import *
-from PPlay.gameimage import *
-from PPlay.animation import *
 from variaveis import *
 
 #Demonio
 demon = Sprite("Game Assets/Mobs/Demon King/demon_idle/demon_idle_1.png")
-v_demon = 65
+v_demon = 105
+
 
 #Animação Demonio
 index_animacao_d = 0
@@ -22,3 +19,5 @@ demon_attacking = False
 demon_atacou = False
 demon_cronometro = 0
 demon_direction = -1
+demon_delay_attack = 3
+player_levou_dano = False

@@ -1,3 +1,4 @@
+import boss
 from PPlay.window import *
 from PPlay.sprite import *
 from PPlay.gameimage import *
@@ -6,13 +7,19 @@ from demon import *
 from main import inic_jogo
 from math import fabs
 from ghost import *
+from fire_skull import *
+from boss import *
 
 janela.set_title("Blood Moon Ascension")
 healthbar.set_position(janela.width - 230, 30)
 player.set_position(janela.width / 2, janela.height - player.height - 24)
 demon.set_position(janela.width + 100, janela.height - demon.height - 24)
+boss_esquerda.set_position(janela.width + 200, janela.height - boss_esquerda.height - 24)
 ghost_spawn_left()
 ghost_spawn_right()
+skull_spawn_left()
+skull_spawn_right()
+skull_spawn_up()
 
 while True:
 
@@ -22,24 +29,38 @@ while True:
 
     #////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
 
+    #------HITBOX-PLAYER------#
+    player_hitbox.x = player.x
+    player_hitbox.y = player.y
 
     # ------MOVIMENTAÇÃO-PLAYER------#
-    if ((tecla.key_pressed("left")) and not player_dash):
+    if ((tecla.key_pressed("left")) and not player_dash and not atacou):
         player_running = True
         player_direction = -1
         start = 1
-        v_player = 100 * player_direction
+        v_player = 200 * player_direction
         player.x = player.x + v_player * janela.delta_time()
-    elif ((tecla.key_pressed("right")) and not player_dash):
+    elif ((tecla.key_pressed("right")) and not player_dash and not atacou):
         player_running = True
         player_direction = 1
         start = 1
-        v_player = 100 * player_direction
+        v_player = 200 * player_direction
         player.x = player.x + v_player * janela.delta_time()
     else:
         player_running = False
 
-    # ------ATAQUE-DO-PLAYER------#
+    if tecla.key_pressed("up") and not player_dash and not pulou:
+        pulou = True
+    if pulou and not player_dash:
+        if player.y <= janela.height - player.height - 24:
+            player.y -= gravity * janela.delta_time()
+            gravity -= 3000 * janela.delta_time()
+        else:
+            gravity = gravity_bkup
+            pulou = False
+            player.y = janela.height - player.height - 24
+
+        # ------ATAQUE-DO-PLAYER------#
     if (tecla.key_pressed("x") and cronometro_ataque == 0):
         if (player_direction == 1):
             player.x += 1000 * janela.delta_time()
@@ -51,7 +72,7 @@ while True:
 
     if (atacou):
         cronometro_ataque += janela.delta_time()
-        if (cronometro_ataque > 0.7):
+        if (cronometro_ataque > 0.4):
             if (player_direction == -1):
                 player.x += 4.5
             player_attacking = False
@@ -63,6 +84,7 @@ while True:
     if (tecla.key_pressed("space") and (cronometro_dash >= 2) and player_running == True):
         cronometro_dash = 0
         player_dash = True
+        gravity = 0
 
     if (player_dash and cronometro_dash < 0.2):
         if (player_direction == 1):
@@ -105,7 +127,23 @@ while True:
     if index_animacao >= len(frames_atual):
         index_animacao = 0
     player.image = frames_atual[int(index_animacao)]
-    player.draw()
+    if not player_invuneravel:
+        player.draw()
+    else:
+        if player_invuneravel_cronometro > 0 and player_invuneravel_cronometro < 0.2:
+            pass
+        elif player_invuneravel_cronometro > 0.2 and player_invuneravel_cronometro < 0.4:
+            player.draw()
+        elif player_invuneravel_cronometro > 0.4 and player_invuneravel_cronometro < 0.6:
+            pass
+        elif player_invuneravel_cronometro > 0.6 and player_invuneravel_cronometro < 0.8:
+            player.draw()
+        elif player_invuneravel_cronometro > 0.8 and player_invuneravel_cronometro < 0.9:
+            pass
+        elif player_invuneravel_cronometro > 0.9 and player_invuneravel_cronometro < 1.2:
+            player.draw()
+        else:
+            player.draw()
 
     # ------ESTADO-VIDA-DO-PLAYER------#
     if (vida_player == 30):
@@ -129,24 +167,33 @@ while True:
 
     #------ATAQUE-DEMONIO------#
     if (demon_direction == 1):
-        if ((demon.x - player.x) <= 5) and (demon_cronometro == 0):
+        if ((demon.x - player.x) <= -55) and (demon_delay_attack > 3):
             demon_attacking = True
             demon_atacou = True
 
     if (demon_direction == -1):
-        if (player.x - demon.x <= 5) and (demon_cronometro == 0):
+        if (player.x < demon.x + demon.width - 95) and (demon_delay_attack > 3):
             demon_attacking = True
             demon_atacou = True
+    demon_delay_attack += janela.delta_time()
 
-    #------DURAÇÃO-DO-ATAQUE-DEMONIO------#
+    # ------COLISAO-DEMONIO-PLAYER------#
+    if demon.collided(player_hitbox) and demon_cronometro > 0.35 and not player_levou_dano:
+        player_levou_dano = True
+        player_invuneravel = True
+        vida_player -= 15
+
+    # ------DURAÇÃO-DO-ATAQUE-DEMONIO------#
     if (demon_atacou):
         demon_cronometro += janela.delta_time()
         if (demon_cronometro > 0.7):
             demon_cronometro = 0
             demon_atacou = False
             demon_attacking = False
+            player_levou_dano = False
+            demon_delay_attack = 0
 
-    #------STATUS-DEMONIO------#
+    # ------STATUS-DEMONIO------#
     if (demon.x + demon.width / 2 >= player.x + player.width / 2):
         demon_direction = 1
         if (demon_attacking):
@@ -154,7 +201,7 @@ while True:
         else:
             frames_atual_d = demon_w1
     if (demon.x + demon.width / 2 < player.x + player.width / 2):
-        demon_direction = 1
+        demon_direction = -1
         if (demon_attacking):
             frames_atual_d = demon_at2
         else:
@@ -174,56 +221,84 @@ while True:
     if (start == 1):
         if (onda == 2):
             if (demon_attacking == False):
-                if (demon.x + demon.width / 2 < player.x + player.width / 2):
-                    demon.x = demon.x + v_demon * janela.delta_time()
-                else:
-                    demon.x = demon.x - v_demon * janela.delta_time()
+                if (demon_direction == 1):
+                    if ((demon.x - player.x) >= -55):
+                        demon.x = demon.x - v_demon * janela.delta_time()
+                if (demon_direction == -1):
+                    if (player.x > demon.x + demon.width - 95):
+                        demon.x = demon.x + v_demon * janela.delta_time()
 
     #////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
 
     #------MOVIMENTAÇÃO-E-DESENHO-DOS-FANTASMAS------#
-    ghost_draw()
-    ghost_move_left()
-    ghost_move_right()
+    if start == 1:
+        ghost_draw()
+        ghost_move_left()
+        ghost_move_right()
 
     if (verificador_ghosts_mortos()):
-        onda += 1
-        lista_ghost_left = []
-        lista_ghost_right = []
-        vidas_ghost_left = []
-        vidas_ghost_right = []
-        lista_booleano_ghost_left = []
-        lista_booleano_ghost_right = []
-        lista_crono_ghost_left = []
-        lista_ghost_right = []
+        onda = 2
+
 
     #------COLISÃO-GHOST-E-PLAYER------#
     for i in range(n):
-        if (lista_ghost_left[i].x == player.x) and (not player_dash):
-            if (player_attacking):
+        if (lista_ghost_left[i].collided(player) and vidas_ghost_left[i] > 0):
+            if (player_attacking and not lista_booleano_ghost_left[i] and player_direction == -1):
                 vidas_ghost_left[i] -= dano_player
                 lista_booleano_ghost_left[i] = True
-            else:
+            elif (not player_invuneravel and not player_dash) and (lista_ghost_left[i].collided(player_hitbox)):
                 vida_player -= ghost_dano
                 player_invuneravel = True
-        if (lista_ghost_right[i].x == player.x) and (not player_dash):
-            if (player_attacking):
+        if (lista_ghost_right[i].collided(player) and vidas_ghost_right[i] > 0):
+            if (player_attacking and not lista_booleano_ghost_right[i] and player_direction == 1):
                 vidas_ghost_right[i] -= dano_player
                 lista_booleano_ghost_right[i] = True
-            else:
-                if (not player_invuneravel):
-                    vida_player -= ghost_dano
-                    player_invuneravel = True
+            elif (not player_invuneravel and not player_dash and (lista_ghost_right[i].collided(player_hitbox))):
+                vida_player -= ghost_dano
+                player_invuneravel = True
 
     #------TEMPO-DE-HIT-DO-FANTASMA------#
     for i in range(n):
         if lista_booleano_ghost_left[i] == True:
             lista_crono_ghost_left[i] += janela.delta_time()
             if lista_crono_ghost_left[i] > 1:
+                lista_booleano_ghost_left[i] = False
                 lista_crono_ghost_left[i] = 0
         if lista_booleano_ghost_right[i] == True:
             lista_crono_ghost_right[i] += janela.delta_time()
             if lista_crono_ghost_right[i] > 1:
                 lista_crono_ghost_right[i] = 0
+                lista_booleano_ghost_right[i] = False
+
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+    #------FUNÇÕES-CAVEIRA-FLAMEJANTE------#
+    if (start == 1):
+        if (onda == 2):
+            skull_move_right()
+            skull_move_left()
+            skull_move_up()
+            #skull_draw()
+
+    if (contador_passadas[0] >= 50):
+        fim_skull()
+        onda = 3
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+    onda = 4
+    if (start == 1):
+        if (onda == 4):
+            boss_hitbox_accuracy()
+            boss_move()
+            boss_draw()
+
+    if (boss_direction[0] == 1):
+        boss = Sprite("Game Assets/Mobs/Final Boss/boss_idle/demon-idle2.png")
+
+    if (boss_atacando):
+        if (boss_hitbox_ataque.collided(player_hitbox)):
+            vida_player -= boss_dano_fogo
+            player_invuneravel = True
+
+
 
     janela.update()

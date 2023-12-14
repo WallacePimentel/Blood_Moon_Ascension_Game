@@ -19,6 +19,7 @@ background = GameImage("Game Assets/Background/background2.png")
 
 #Player
 player = Sprite("Game Assets/Characters/Iddle Right/player1.png")
+player_hitbox = Sprite("Game Assets/Characters/player_hitbox.png")
 index_animacao = 0
 player_direction = 1
 player_running = False
@@ -29,6 +30,9 @@ cronometro_dash = 2
 player_dash = False
 player_invuneravel = False
 player_invuneravel_cronometro = 0
+pulou = False
+gravity = 800
+gravity_bkup = 800
 
 #Frames de Animação do Player:
 

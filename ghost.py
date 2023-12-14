@@ -1,12 +1,13 @@
 from variaveis import *
+import random
 
 #------VARIAVEIS-DE-SPAWN-E-MOVIMENTAÇAO------#
-n = 8
+n = 0
 lista_ghost_right = []
 lista_ghost_left = []
 vidas_ghost_right = []
 vidas_ghost_left = []
-velocidade_ghost = 65
+velocidade_ghost = 270
 ghost_distance_appart = 150
 
 #------VARIAVEIS-DE-INTERAÇÃO------#
@@ -18,30 +19,37 @@ ghost_dano = 10
 
 def ghost_spawn_left ():
     for i in range(n):
-        new_ghost = Sprite("Game Assets/Mobs/Ghost/ghost_iddle_right/ghost-idle1.png")
-        vida_atual = 30
+        append_distance = 0
+        new_ghost = Sprite("Game Assets/Mobs/Ghost/ghost_iddle_right/ghost-idle.png",7)
+        new_ghost.set_total_duration(1000)
+        vida_atual = 10
         vidas_ghost_left.append(vida_atual)
         lista_booleano_ghost_left.append(False)
         lista_crono_ghost_left.append(0)
-        new_ghost.set_position(-1200 + ghost_distance_appart * i,janela.height - new_ghost.height - 24)
+        new_ghost.set_position(-1200 * random.randint(1,3)  +
+                               ghost_distance_appart * i,janela.height - new_ghost.height - 24)
         lista_ghost_left.append(new_ghost)
 
 def ghost_spawn_right ():
     for i in range(n):
-        new_ghost = Sprite("Game Assets/Mobs/Ghost/ghost_iddle/ghost-idle1.png")
-        vida_atual = 30
+        append_distance = 0
+        new_ghost = Sprite("Game Assets/Mobs/Ghost/ghost_iddle/ghost-idle.png",7)
+        new_ghost.set_total_duration(1000)
+        vida_atual = 10
         vidas_ghost_right.append(vida_atual)
         lista_booleano_ghost_right.append(False)
         lista_crono_ghost_right.append(0)
-        new_ghost.set_position(janela.width + 1200 - ghost_distance_appart * i,janela.height - new_ghost.height - 24)
+        new_ghost.set_position(janela.width + 1200 * random.randint(1,3) -
+                               ghost_distance_appart * i,janela.height - new_ghost.height - 24)
         lista_ghost_right.append(new_ghost)
-
 def ghost_draw():
     for i in range(n):
         if (vidas_ghost_left[i] > 0):
             lista_ghost_left[i].draw()
+            lista_ghost_left[i].update()
         if (vidas_ghost_right[i] > 0):
             lista_ghost_right[i].draw()
+            lista_ghost_right[i].update
 def ghost_move_left ():
     for i in range(n):
         if lista_crono_ghost_left[i] == 0:
