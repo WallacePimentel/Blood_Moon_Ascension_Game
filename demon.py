@@ -2,6 +2,9 @@ from variaveis import *
 
 #Demonio
 demon = Sprite("Game Assets/Mobs/Demon King/demon_idle/demon_idle_1.png")
+demon_hitbox = Sprite("Game Assets/Mobs/Demon King/demon_hitbox.png")
+demon_hitbox_atacando_direita = Sprite("Game Assets/Mobs/Demon King/demon_hitbox_atacando.png")
+demon_hitbox_atacando_esquerda = Sprite("Game Assets/Mobs/Demon King/demon_hitbox_atacando2.png")
 demon_morrendo = Sprite("Game Assets/Mobs/Demon King/demon_death/demon_death_1.png")
 v_demon = 85
 

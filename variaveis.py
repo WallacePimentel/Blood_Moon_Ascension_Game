@@ -6,7 +6,7 @@ from PPlay.animation import *
 #Janela do Jogo:
 janela = Window(1080,720)
 start = 0
-onda = 3
+onda = 1
 
 #Teclado
 tecla = janela.get_keyboard()
@@ -16,6 +16,8 @@ click = janela.get_mouse()
 
 #Fundo
 background = GameImage("Game Assets/Background/background2.png")
+background_game_over = GameImage("Game Assets/Background/game_over.png")
+background_vitoria = GameImage("Game Assets/Background/vitoria.png")
 
 #Player
 player = Sprite("Game Assets/Characters/Iddle Right/player1.png")
