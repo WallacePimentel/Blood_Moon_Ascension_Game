@@ -27,9 +27,9 @@ while True:
     background.draw()
     healthbar.draw()
 
-    #////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+    # ////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
 
-    #------HITBOX-PLAYER------#
+    # ------HITBOX-PLAYER------#
     player_hitbox.x = player.x
     player_hitbox.y = player.y
 
@@ -94,13 +94,12 @@ while True:
     else:
         player_dash = False
 
-    #------INVUNERABILIDADE-PÓS-DANO-DO-PLAYER------#
+    # ------INVUNERABILIDADE-PÓS-DANO-DO-PLAYER------#
     if (player_invuneravel):
         player_invuneravel_cronometro += janela.delta_time()
         if (player_invuneravel_cronometro >= 2):
             player_invuneravel_cronometro = 0
             player_invuneravel = False
-
 
     # ------STATUS-ANIMAÇÃO-PLAYER------#
 
@@ -146,101 +145,122 @@ while True:
             player.draw()
 
     # ------ESTADO-VIDA-DO-PLAYER------#
-    if (vida_player == 30):
+    if (30 >= vida_player > 20):
         healthbar = Sprite("Game Assets/Icones/health30.png")
         healthbar.set_position(janela.width - 230, 30)
         healthbar.draw()
-    if (vida_player == 20):
+    if (20 >= vida_player > 10):
         healthbar = Sprite("Game Assets/Icones/health20.png")
         healthbar.set_position(janela.width - 230, 30)
         healthbar.draw()
-    if (vida_player == 10):
+    if (10 >= vida_player > 0):
         healthbar = Sprite("Game Assets/Icones/health10.png")
         healthbar.set_position(janela.width - 230, 30)
         healthbar.draw()
-    if (vida_player == 0):
+    if (vida_player <= 0):
         healthbar = Sprite("Game Assets/Icones/health0.png")
         healthbar.set_position(janela.width - 230, 30)
         healthbar.draw()
 
-    #////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+    # ////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
 
-    #------ATAQUE-DEMONIO------#
-    if (demon_direction == 1):
-        if ((demon.x - player.x) <= -55) and (demon_delay_attack > 3):
-            demon_attacking = True
-            demon_atacou = True
+    # ------ATAQUE-DEMONIO------#
+    if vida_demon > 0:
+        if (demon_direction == 1):
+            if ((demon.x - player.x) <= -55) and (demon_delay_attack > 3):
+                demon_attacking = True
+                demon_atacou = True
 
-    if (demon_direction == -1):
-        if (player.x < demon.x + demon.width - 95) and (demon_delay_attack > 3):
-            demon_attacking = True
-            demon_atacou = True
-    demon_delay_attack += janela.delta_time()
+        if (demon_direction == -1):
+            if (player.x < demon.x + demon.width - 95) and (demon_delay_attack > 3):
+                demon_attacking = True
+                demon_atacou = True
+        demon_delay_attack += janela.delta_time()
 
-    # ------COLISAO-DEMONIO-PLAYER------#
-    if demon.collided(player_hitbox) and demon_cronometro > 0.35 and not player_levou_dano:
-        player_levou_dano = True
-        player_invuneravel = True
-        vida_player -= 15
+        # ------COLISAO-DEMONIO-PLAYER------#
+        if not player_dash and demon.collided(player_hitbox) and demon_cronometro > 0.38 and not player_levou_dano:
+            player_levou_dano = True
+            player_invuneravel = True
+            vida_player -= 15
 
-    # ------DURAÇÃO-DO-ATAQUE-DEMONIO------#
-    if (demon_atacou):
-        demon_cronometro += janela.delta_time()
-        if (demon_cronometro > 0.7):
-            demon_cronometro = 0
-            demon_atacou = False
-            demon_attacking = False
-            player_levou_dano = False
-            demon_delay_attack = 0
+        if demon.collided(player) and player_attacking and cronometro_dano_sofrido_demon == 0:
+            vida_demon -= dano_player
+            cronometro_dano_sofrido_demon += janela.delta_time()
+        if cronometro_dano_sofrido_demon != 0:
+            cronometro_dano_sofrido_demon += janela.delta_time()
+            if cronometro_dano_sofrido_demon > 0.4:
+                cronometro_dano_sofrido_demon = 0
 
-    # ------STATUS-DEMONIO------#
-    if (demon.x + demon.width / 2 >= player.x + player.width / 2):
-        demon_direction = 1
+        # ------DURAÇÃO-DO-ATAQUE-DEMONIO------#
+        if (demon_atacou):
+            demon_cronometro += janela.delta_time()
+            if (demon_cronometro > 0.7):
+                demon_cronometro = 0
+                demon_atacou = False
+                demon_attacking = False
+                player_levou_dano = False
+                demon_delay_attack = 0
+
+        # ------STATUS-DEMONIO------#
+        if (demon.x + demon.width / 2 >= player.x + player.width / 2):
+            demon_direction = 1
+            if (demon_attacking):
+                frames_atual_d = demon_at1
+            else:
+                frames_atual_d = demon_w1
+        if (demon.x + demon.width / 2 < player.x + player.width / 2):
+            demon_direction = -1
+            if (demon_attacking):
+                frames_atual_d = demon_at2
+            else:
+                frames_atual_d = demon_w2
+
+        # ------ANIMAÇÃO-DEMONIO------#
         if (demon_attacking):
-            frames_atual_d = demon_at1
+            index_animacao_d += 0.019
         else:
-            frames_atual_d = demon_w1
-    if (demon.x + demon.width / 2 < player.x + player.width / 2):
-        demon_direction = -1
-        if (demon_attacking):
-            frames_atual_d = demon_at2
-        else:
-            frames_atual_d = demon_w2
+            index_animacao_d += 0.01
+        if index_animacao_d >= len(frames_atual_d):
+            index_animacao_d = 0
+        demon.image = frames_atual_d[int(index_animacao_d)]
 
-    # ------ANIMAÇÃO-DEMONIO------#
-    if (demon_attacking):
-        index_animacao_d += 0.019
-    else:
-        index_animacao_d += 0.01
-    if index_animacao_d >= len(frames_atual_d):
-        index_animacao_d = 0
-    demon.image = frames_atual_d[int(index_animacao_d)]
-    demon.draw()
+        demon.draw()
 
-    # ------MOVIMENTAÇÃO-DEMONIO------#
-    if (start == 1):
-        if (onda == 2):
-            if (demon_attacking == False):
-                if (demon_direction == 1):
-                    if ((demon.x - player.x) >= -55):
-                        demon.x = demon.x - v_demon * janela.delta_time()
-                if (demon_direction == -1):
-                    if (player.x > demon.x + demon.width - 95):
-                        demon.x = demon.x + v_demon * janela.delta_time()
+        # ------MOVIMENTAÇÃO-DEMONIO------#
+        if (start == 1):
+            if (onda == 3):
+                if (demon_attacking == False):
+                    if (demon_direction == 1):
+                        if ((demon.x - player.x) >= -55):
+                            demon.x = demon.x - v_demon * janela.delta_time()
+                    if (demon_direction == -1):
+                        if (player.x > demon.x + demon.width - 95):
+                            demon.x = demon.x + v_demon * janela.delta_time()
 
-    #////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+    #------THE-EVIL-DEAD------#
+    if (vida_demon <= 0):
+        demon_morrendo.set_position(demon.x,demon.y)
+        index_animacao_death_demonio += 0.017
+        cronometro_excluir += 0.017
+        if index_animacao_death_demonio >= len(demon_dy):
+            index_animacao_death_demonio = 0
+        if cronometro_excluir >= 22:
+            demon_morrendo.set_position(1000000,1000000)
+        demon_morrendo.image = demon_dy[int(index_animacao_death_demonio)]
+        demon_morrendo.draw()
 
-    #------MOVIMENTAÇÃO-E-DESENHO-DOS-FANTASMAS------#
+    # ////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+
+    # ------MOVIMENTAÇÃO-E-DESENHO-DOS-FANTASMAS------#
     if start == 1:
         ghost_draw()
         ghost_move_left()
         ghost_move_right()
 
     if (verificador_ghosts_mortos()):
-        onda = 2
+        pass
 
-
-    #------COLISÃO-GHOST-E-PLAYER------#
+    # ------COLISÃO-GHOST-E-PLAYER------#
     for i in range(n):
         if (lista_ghost_left[i].collided(player) and vidas_ghost_left[i] > 0):
             if (player_attacking and not lista_booleano_ghost_left[i] and player_direction == -1):
@@ -257,7 +277,7 @@ while True:
                 vida_player -= ghost_dano
                 player_invuneravel = True
 
-    #------TEMPO-DE-HIT-DO-FANTASMA------#
+    # ------TEMPO-DE-HIT-DO-FANTASMA------#
     for i in range(n):
         if lista_booleano_ghost_left[i] == True:
             lista_crono_ghost_left[i] += janela.delta_time()
@@ -270,34 +290,48 @@ while True:
                 lista_crono_ghost_right[i] = 0
                 lista_booleano_ghost_right[i] = False
 
-#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
-    #------FUNÇÕES-CAVEIRA-FLAMEJANTE------#
+    # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+    # ------FUNÇÕES-CAVEIRA-FLAMEJANTE------#
     if (start == 1):
         if (onda == 2):
             skull_move_right()
             skull_move_left()
             skull_move_up()
-            #skull_draw()
+            # skull_draw()
 
     if (contador_passadas[0] >= 50):
         fim_skull()
         onda = 3
 
-#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
-    onda = 4
+    #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
     if (start == 1):
         if (onda == 4):
             boss_hitbox_accuracy()
-            boss_move()
-            boss_draw()
+            boss_move(boss_atacando)
+            boss_direction_now()
+            boss_sincronismo()
+            boss_draw(boss_atacando)
 
-    if (boss_direction[0] == 1):
-        boss = Sprite("Game Assets/Mobs/Final Boss/boss_idle/demon-idle2.png")
+    #------ATAQUE-BOSS------#
+    boss_intervalo_ataque_cronometro += janela.delta_time()
+    if (boss_intervalo_ataque_cronometro > 2):
+        boss_atacando = True
 
     if (boss_atacando):
-        if (boss_hitbox_ataque.collided(player_hitbox)):
-            vida_player -= boss_dano_fogo
-            player_invuneravel = True
+        boss_atacando_cronometro += janela.delta_time()
+        if (boss_atacando_cronometro > 2):
+            boss_atacando_cronometro = 0
+            boss_intervalo_ataque_cronometro = 0
+            boss_atacando = False
+
+        if (boss_direction[0] == -1):
+            if (boss_hitbox_ataque_esquerda.collided(player_hitbox) and not player_invuneravel):
+                vida_player -= boss_dano_fogo
+                player_invuneravel = True
+        if (boss_direction[0] == 1):
+            if (boss_hitbox_ataque_direita.collided(player_hitbox) and not player_invuneravel):
+                vida_player -= boss_dano_fogo
+                player_invuneravel = True
 
 
 
