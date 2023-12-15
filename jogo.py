@@ -27,6 +27,8 @@ fim = False
 passou = 0
 fim_de_jogo = False
 restart_enable = False
+sound1.set_volume(100)
+sound1.play()
 
 while True:
 
@@ -39,6 +41,12 @@ while True:
     # ------HITBOX-PLAYER------#
     player_hitbox.x = player.x
     player_hitbox.y = player.y
+
+    if (vida_player > 30):
+        tempx = healthbar.x
+        tempy = healthbar.y
+        healthbar = Sprite("Game Assets/Icones/health40.png")
+        healthbar.set_position(tempx,tempy)
 
     # ------MOVIMENTAÇÃO-PLAYER------#
     if ((tecla.key_pressed("left")) and not player_dash and not atacou and (player_hitbox.x > 0)):
@@ -328,24 +336,25 @@ while True:
     # ------FUNÇÕES-CAVEIRA-FLAMEJANTE------#
     if (start == 1):
         if (onda == 2):
+            fim_skull()
             skull_move_right()
             skull_move_left()
             skull_move_up()
             skull_draw()
             skull_hitbox_accuracy()
 
-    for i in range(numero):
-        if (lista_hitbox_skull_left[i].collided(player_hitbox) and not player_invuneravel and not player_dash):
-            vida_player -= skull_dano
-            player_invuneravel = True
-        if (lista_hitbox_skull_right[i].collided(player_hitbox) and not player_invuneravel and not player_dash):
-            vida_player -= skull_dano
-            player_invuneravel = True
-        if (lista_hitbox_skull_up[i].collided(player_hitbox) and not player_invuneravel and not player_dash):
-            vida_player -= skull_dano
-            player_invuneravel = True
+    if (onda == 2):
+        for i in range(numero):
+            if (lista_hitbox_skull_left[i].collided(player_hitbox) and not player_invuneravel and not player_dash):
+                vida_player -= skull_dano
+                player_invuneravel = True
+            if (lista_hitbox_skull_right[i].collided(player_hitbox) and not player_invuneravel and not player_dash):
+                vida_player -= skull_dano
+                player_invuneravel = True
+            if (lista_hitbox_skull_up[i].collided(player_hitbox) and not player_invuneravel and not player_dash):
+                vida_player -= skull_dano
+                player_invuneravel = True
 
-    fim_skull()
 
     if (contador_passadas[0] >= 50):
         onda = 3 + passou
@@ -361,43 +370,44 @@ while True:
             boss_draw(boss_atacando,boss_timer)
 
     #------ATAQUE-BOSS------#
-    boss_intervalo_ataque_cronometro += janela.delta_time()
-    if (boss_intervalo_ataque_cronometro > 5):
-        boss_atacando = True
+    if (onda >= 4):
+        boss_intervalo_ataque_cronometro += janela.delta_time()
+        if (boss_intervalo_ataque_cronometro > 5):
+            boss_atacando = True
 
-    if (boss_atacando):
-        boss_atacando_cronometro += janela.delta_time()
-        if (boss_atacando_cronometro > 2):
-            boss_atacando_cronometro = 0
-            boss_intervalo_ataque_cronometro = 0
-            boss_atacando = False
+        if (boss_atacando):
+            boss_atacando_cronometro += janela.delta_time()
+            if (boss_atacando_cronometro > 2):
+                boss_atacando_cronometro = 0
+                boss_intervalo_ataque_cronometro = 0
+                boss_atacando = False
 
-        if (boss_direction[0] == -1):
-            if (boss_hitbox_ataque_esquerda.collided(player_hitbox) and not player_invuneravel and not player_dash):
-                vida_player -= boss_dano_fogo
-                player_invuneravel = True
-        if (boss_direction[0] == 1):
-            if (boss_hitbox_ataque_direita.collided(player_hitbox) and not player_invuneravel and not player_dash):
-                vida_player -= boss_dano_fogo
-                player_invuneravel = True
+            if (boss_direction[0] == -1):
+                if (boss_hitbox_ataque_esquerda.collided(player_hitbox) and not player_invuneravel and not player_dash):
+                    vida_player -= boss_dano_fogo
+                    player_invuneravel = True
+            if (boss_direction[0] == 1):
+                if (boss_hitbox_ataque_direita.collided(player_hitbox) and not player_invuneravel and not player_dash):
+                    vida_player -= boss_dano_fogo
+                    player_invuneravel = True
 
-    if (not boss_atacando) and (boss_hitbox.collided(player)) and player_attacking and boss_timer == 0:
-        boss_tomou_dano = True
-        boss_vida -= dano_player
+        if (not boss_atacando) and (boss_hitbox.collided(player)) and player_attacking and boss_timer == 0:
+            boss_tomou_dano = True
+            boss_vida -= dano_player
 
-    if boss_tomou_dano:
-        boss_timer += janela.delta_time()
-    if boss_timer > 0.4:
-        boss_tomou_dano = False
-        boss_timer = 0
+        if boss_tomou_dano:
+            boss_timer += janela.delta_time()
+        if boss_timer > 0.4:
+            boss_tomou_dano = False
+            boss_timer = 0
 
-    #------COLISÃO-CAVALO------#
-    if (nightmare_hitbox_esquerda.collided(player_hitbox) and not player_invuneravel and not player_dash):
-        vida_player -= nightmare_damage
-        player_invuneravel = True
-    if (nightmare_hitbox_direita.collided(player_hitbox) and not player_invuneravel and not player_dash):
-        vida_player -= nightmare_damage
-        player_invuneravel = True
+        #------COLISÃO-CAVALO------#
+        if (nightmare_hitbox_esquerda.collided(player_hitbox) and not player_invuneravel and not player_dash):
+            vida_player -= nightmare_damage
+            player_invuneravel = True
+        if (nightmare_hitbox_direita.collided(player_hitbox) and not player_invuneravel and not player_dash):
+            vida_player -= nightmare_damage
+            player_invuneravel = True
 
     if (boss_vida <= 0):
         fim_de_jogo = True
@@ -431,13 +441,13 @@ while True:
             boss_esquerda.set_position(janela.width + 200, janela.height - boss_esquerda.height - 24)
             nightmare_esquerda.set_position(-1200, janela.height - nightmare_esquerda.height - 24)
             nightmare_direita.set_position(janela.width + 2000, janela.height - nightmare_direita.height - 24)
-            vida_player = 40
+            vida_player = 60
             boss_vida = 150
             vida_demon = 200
             onda = 1
+            fim = False
             contador_passadas[0] = 0
             passou = 0
-            healthbar.draw()
             fim_de_jogo = False
 
 

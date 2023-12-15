@@ -1,7 +1,7 @@
 from variaveis import *
 
 boss_vida = 150
-boss_velocidade = 165
+boss_velocidade = 110
 nightmare_velocidade = 300
 nightmare_damage = 5
 

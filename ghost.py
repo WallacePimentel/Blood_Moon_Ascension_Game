@@ -63,6 +63,8 @@ def ghost_move_right():
                 lista_ghost_right[i].set_position(janela.width + 1200,janela.height - lista_ghost_right[i].height - 24)
 
 def verificador_ghosts_mortos (fim):
+    if fim:
+        return False
     for i in range(n):
         if (vidas_ghost_left[i] > 0) or (vidas_ghost_right[i] > 0):
             return False

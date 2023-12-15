@@ -2,6 +2,7 @@ from PPlay.window import *
 from PPlay.sprite import *
 from PPlay.gameimage import *
 from PPlay.animation import *
+from PPlay.sound import *
 
 #Janela do Jogo:
 janela = Window(1080,720)
@@ -18,6 +19,9 @@ click = janela.get_mouse()
 background = GameImage("Game Assets/Background/background2.png")
 background_game_over = GameImage("Game Assets/Background/game_over.png")
 background_vitoria = GameImage("Game Assets/Background/vitoria.png")
+
+#SoundTracks
+sound1 = Sound("Game Assets/Soundtrack/sound1.ogg")
 
 #Player
 player = Sprite("Game Assets/Characters/Iddle Right/player1.png")
