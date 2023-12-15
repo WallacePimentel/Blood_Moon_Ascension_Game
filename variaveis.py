@@ -20,6 +20,9 @@ background = GameImage("Game Assets/Background/background2.png")
 background_game_over = GameImage("Game Assets/Background/game_over.png")
 background_vitoria = GameImage("Game Assets/Background/vitoria.png")
 
+#Instruções
+instructions = Sprite("Game Assets/Icones/instrucoes.png")
+
 #SoundTracks
 sound1 = Sound("Game Assets/Soundtrack/sound1.ogg")
 

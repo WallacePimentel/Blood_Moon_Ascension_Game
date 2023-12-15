@@ -36,6 +36,10 @@ while True:
     background.draw()
     healthbar.draw()
 
+    if (start == 0):
+        instructions.set_position(0,0)
+        instructions.draw()
+
     # ////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
 
     # ------HITBOX-PLAYER------#
@@ -160,16 +164,32 @@ while True:
             player.draw()
 
     # ------ESTADO-VIDA-DO-PLAYER------#
-    if (30 >= vida_player > 20):
+    if (35 >= vida_player > 30):
+        healthbar = Sprite("Game Assets/Icones/health35.png")
+        healthbar.set_position(janela.width - 230, 30)
+        healthbar.draw()
+    if (30 >= vida_player > 25):
         healthbar = Sprite("Game Assets/Icones/health30.png")
         healthbar.set_position(janela.width - 230, 30)
         healthbar.draw()
-    if (20 >= vida_player > 10):
+    if (25 >= vida_player > 20):
+        healthbar = Sprite("Game Assets/Icones/health25.png")
+        healthbar.set_position(janela.width - 230, 30)
+        healthbar.draw()
+    if (20 >= vida_player > 15):
         healthbar = Sprite("Game Assets/Icones/health20.png")
         healthbar.set_position(janela.width - 230, 30)
         healthbar.draw()
-    if (10 >= vida_player > 0):
+    if (15 >= vida_player > 10):
+        healthbar = Sprite("Game Assets/Icones/health15.png")
+        healthbar.set_position(janela.width - 230, 30)
+        healthbar.draw()
+    if (10 >= vida_player > 5):
         healthbar = Sprite("Game Assets/Icones/health10.png")
+        healthbar.set_position(janela.width - 230, 30)
+        healthbar.draw()
+    if (5 >= vida_player > 0):
+        healthbar = Sprite("Game Assets/Icones/health5.png")
         healthbar.set_position(janela.width - 230, 30)
         healthbar.draw()
     if (vida_player <= 0):
