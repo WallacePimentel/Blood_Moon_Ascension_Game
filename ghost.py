@@ -7,7 +7,7 @@ lista_ghost_right = []
 lista_ghost_left = []
 vidas_ghost_right = []
 vidas_ghost_left = []
-velocidade_ghost = 270
+velocidade_ghost = 285
 ghost_distance_appart = 150
 
 #------VARIAVEIS-DE-INTERAÇÃO------#

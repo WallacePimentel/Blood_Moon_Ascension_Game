@@ -75,6 +75,10 @@ def boss_draw(boss_atacando,boss_timer):
                     pass
                 if 0.3 < boss_timer <= 0.4:
                     boss_esquerda.draw()
+                if 0.4 < boss_timer <= 0.5:
+                    pass
+                if boss_timer >= 0.5:
+                    boss_esquerda.draw()
             boss_esquerda.update()
         else:
             if boss_timer == 0:
@@ -87,6 +91,10 @@ def boss_draw(boss_atacando,boss_timer):
                 if 0.2 < boss_timer <= 0.3:
                     pass
                 if 0.3 < boss_timer <= 0.4:
+                    boss_atacando_esquerda.draw()
+                if 0.4 < boss_timer <= 0.5:
+                    pass
+                if boss_timer >= 0.5:
                     boss_atacando_esquerda.draw()
             boss_atacando_esquerda.update()
     if (boss_direction[0] == 1):
@@ -102,6 +110,10 @@ def boss_draw(boss_atacando,boss_timer):
                     pass
                 if 0.3 < boss_timer <= 0.4:
                     boss_direita.draw()
+                if 0.4 < boss_timer <= 0.5:
+                    pass
+                if boss_timer >= 0.5:
+                    boss_direita.draw()
             boss_direita.update()
         else:
             if boss_timer == 0:
@@ -114,6 +126,10 @@ def boss_draw(boss_atacando,boss_timer):
                 if 0.2 < boss_timer <= 0.3:
                     pass
                 if 0.3 < boss_timer <= 0.4:
+                    boss_atacando_direita.draw()
+                if 0.4 < boss_timer <= 0.5:
+                    pass
+                if boss_timer >= 0.5:
                     boss_atacando_direita.draw()
             boss_atacando_direita.update()
     nightmare_esquerda.draw()

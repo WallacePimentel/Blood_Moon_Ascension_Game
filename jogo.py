@@ -362,6 +362,48 @@ while True:
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
     if (start == 1):
         if (onda >= 4):
+
+            if (boss_vida >= 150):
+                boss_bar = Sprite("Game Assets/Icones/boss1.png")
+                boss_bar.set_position(janela.width/2 - boss_bar.width/2, 30)
+                boss_bar.draw()
+            elif (150 > boss_vida >= 135):
+                boss_bar = Sprite("Game Assets/Icones/boss2.png")
+                boss_bar.set_position(janela.width/2 - boss_bar.width/2, 30)
+                boss_bar.draw()
+            elif (135 > boss_vida >= 120):
+                boss_bar = Sprite("Game Assets/Icones/boss3.png")
+                boss_bar.set_position(janela.width/2 - boss_bar.width/2, 30)
+                boss_bar.draw()
+            elif (120 > boss_vida >= 105):
+                boss_bar = Sprite("Game Assets/Icones/boss4.png")
+                boss_bar.set_position(janela.width/2 - boss_bar.width/2, 30)
+                boss_bar.draw()
+            elif (105 > boss_vida >= 90):
+                boss_bar = Sprite("Game Assets/Icones/boss5.png")
+                boss_bar.set_position(janela.width/2 - boss_bar.width/2, 30)
+                boss_bar.draw()
+            elif (90 > boss_vida >= 75):
+                boss_bar = Sprite("Game Assets/Icones/boss6.png")
+                boss_bar.set_position(janela.width/2 - boss_bar.width/2, 30)
+                boss_bar.draw()
+            elif (75 > boss_vida >= 60):
+                boss_bar = Sprite("Game Assets/Icones/boss7.png")
+                boss_bar.set_position(janela.width/2 - boss_bar.width/2, 30)
+                boss_bar.draw()
+            elif (60 > boss_vida >= 45):
+                boss_bar = Sprite("Game Assets/Icones/boss8.png")
+                boss_bar.set_position(janela.width/2 - boss_bar.width/2, 30)
+                boss_bar.draw()
+            elif (45 > boss_vida >= 30):
+                boss_bar = Sprite("Game Assets/Icones/boss9.png")
+                boss_bar.set_position(janela.width/2 - boss_bar.width/2, 30)
+                boss_bar.draw()
+            elif (30 > boss_vida >= 15):
+                boss_bar = Sprite("Game Assets/Icones/boss10.png")
+                boss_bar.set_position(janela.width/2 - boss_bar.width/2, 30)
+                boss_bar.draw()
+
             boss_hitbox_accuracy()
             boss_move(boss_atacando)
             boss_direction_now()
@@ -397,7 +439,7 @@ while True:
 
         if boss_tomou_dano:
             boss_timer += janela.delta_time()
-        if boss_timer > 0.4:
+        if boss_timer > 1:
             boss_tomou_dano = False
             boss_timer = 0
 
